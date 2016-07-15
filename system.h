@@ -92,6 +92,11 @@ private:
 
 	}
 
+	int get_reaction()
+	{
+		
+	}
+
 	// // Print state to screen
 	// void state()
 	// {
