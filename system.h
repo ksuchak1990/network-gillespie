@@ -20,6 +20,7 @@ private:
 	// Random number - 0<r<1
 	double get_rn01()
 	{
+		srand((unsigned int)time(NULL));
 		return ((double)rand() / (RAND_MAX));
 	}
 
@@ -55,6 +56,7 @@ private:
 		return props;
 	}
 
+	// Update system
 	void update_state(double tau,int reaction)
 	{
 		valt += tau;
@@ -75,11 +77,7 @@ private:
 		}
 	}
 
-	double get_alpha0()
-	{
-
-	}
-
+	// Aggregate number of infected
 	int get_I()
 	{
 		std::vector<int> vec = get_all_states();
@@ -89,13 +87,13 @@ private:
 
 	double get_t()
 	{
-
+		return valt;
 	}
 
-	int get_reaction()
-	{
+	// int get_reaction()
+	// {
 		
-	}
+	// }
 
 	// // Print state to screen
 	// void state()
@@ -113,6 +111,7 @@ public:
 
 	// 1. CONSTRUCTOR METHODS
 
+	// Constructor for 
 	mysystem(double b, int V) : graph(V)
 	{
 		valb = b;
@@ -125,36 +124,48 @@ public:
 		valt = 0;
 	}
 
+	// Run Gillespie algorithm for system
 	void Gillespie(std::ofstream& fout)
 	{
-		// Set up initial vector
-		// Propensities - alpha vector
-		// Determine int i_max
-
-		int i_max = 100, reaction;
-		double tau, alpha0, gamma;
+		// int i_max = 50;
+		int reaction;
+		int i = 0;
+		double tau, alpha0, total, lower, r;
 		std::vector<double> alpha;
 
 		valt = 0.0;
 
 		fout << valt << '\t' << get_I() << std::endl;
 
-
 		// Loop
-		for (int i = 0; i < i_max; i++)
-		{
+		do
+		{		
+		// for (int i = 0; i < i_max; i++)
+		// {
 			double r1 = get_rn01();
 			double r2 = get_rn01();
 
 			// Compute propensities
 			alpha = update_propensity();
 			alpha0 = std::accumulate(alpha.begin(),alpha.end(),0.0);
+			r = r2 * alpha0;
 
 			// Compute tau based on this set of alphas
 			tau = get_tau(r1,alpha0);
 
 			// Find next reaction
-			// reaction = ;
+			total = 0.0;
+			lower = 0.0;
+			for (int j = 0; j < alpha.size(); j++)
+			{
+				total += alpha[j];
+				if (r >= lower && r < total)
+				{
+					reaction = j;
+					break;
+				}
+				lower = total;
+			}
 
 			// Update state
 			update_state(tau,reaction);
@@ -162,7 +173,10 @@ public:
 			// Output state (to file)
 			fout << valt << '\t' << get_I() << std::endl;
 			// std::cout << valt << '\t' << get_I() << std::endl;
-		}
+
+		} while (get_I() > 0 && get_I() < get_size());
+		// }
+
 	}
 
 	// // 2. ACCESS METHODS

@@ -5,18 +5,24 @@ using namespace std;
 int main()
 {
     ofstream outfile("output.txt");
-
-    int N = 50;
+    int N = 250;
     double b = 0.5;
 
-    graph g(N);
-    g.make_complete();
-    g.set_state(0);
-    g.set_state(0,1);
+    for (int i = 0; i < 10; i++)
+    {
+        graph g(N);
+        g.make_complete();
+        g.set_state(0);
+        for (int j = 0; j < 5; j++)
+        {
+            g.set_state(i+j,1);
+        }
 
-    mysystem s(b,g);
+        mysystem s(b,g);
 
-    s.Gillespie(outfile);
+        s.Gillespie(outfile);
+    }
+
 
 
 
