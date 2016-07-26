@@ -2,25 +2,27 @@
 #ifndef __SYSTEM_H_INCLUDED__	// Prevents class from being redefined
 #define __SYSTEM_H_INCLUDED__
 
-#include <fstream>
-#include <cstdlib>
 #include <cmath>
-#include <numeric>
-#include "graph.h"
+#include <iostream>
+#include <fstream>
 
-class mysystem : public graph
+// #include "SI_network.h"
+#include "SIS_network.h"
+
+// class mysystem : public si_net
+// class mysystem : public sis_net, public si_net
+class mysystem : public sis_net
 {
 private:
 	// 1. DATA MEMBERS
 
-	double valb, valt;
+	double valt;
 
 	// 2. ACCESS METHODS
 
 	// Random number - 0<r<1
 	double get_rn01()
 	{
-		srand((unsigned int)time(NULL));
 		return ((double)rand() / (RAND_MAX));
 	}
 
@@ -30,237 +32,227 @@ private:
 		return (1/alpha0) * log(1/r)  ;
 	}
 
-	// Update propensities
-	std::vector<double> update_propensity()
-	{
-		int N = get_size();
-        std::list<int>::iterator listiter;
-		std::vector<double> props(N);
-		for (int i = 0; i < N; i++)
-		{
-			if (get_state(i) == 0)
-			{
-		        std::list<int> k = get_neighbours(i);
-    		    std::list<int> mylist;
-    		    int x;
-
-    		    for (listiter = k.begin(); listiter != k.end(); listiter++)
-	    	    {
-					if (get_state(*listiter) == 1)
-					{
-						props[i] += valb;
-					}
-    	    	}
-			}
-		}
-		return props;
-	}
-
-	// Update system
-	void update_state(double tau,int reaction)
-	{
-		valt += tau;
-		if (reaction <= get_size())
-		{
-			if (get_state(reaction) == 0)
-			{
-				set_state(reaction,1);
-			}
-			else
-			{
-				std::cout << "Error: invalid reaction" << std::endl;
-			}
-		}
-		else
-		{
-			std::cout << "Error: reaction outside vertex range" << std::endl;
-		}
-	}
-
-	// Aggregate number of infected
-	int get_I()
-	{
-		std::vector<int> vec = get_all_states();
-		int total = std::accumulate(vec.begin(),vec.end(),0);
-        return total;
-	}
-
-	double get_t()
-	{
-		return valt;
-	}
-
-	// int get_reaction()
-	// {
-		
-	// }
-
-	// // Print state to screen
-	// void state()
-	// {
-	// 	std::cout << valt << '\t' << get_I() << std::endl;
-	// }
-
-	// // Print state to file
-	// void state(std::ofstream& fout)
-	// {
-	// 	fout << valt << '\t' << get_I() << std::endl;
-	// }
-
 public:
 
 	// 1. CONSTRUCTOR METHODS
 
+	// // Constructor for 
+	// mysystem(double b, int V) : si_net(b,V)
+	// {
+	// 	valt = 0;
+	// }
+
+	// mysystem(double b, graph g) : si_net(b,g)
+	// {
+	// 	valt = 0;
+	// }
+
+	// mysystem(si_net m) : si_net(m)
+	// {
+	// 	valt = 0;
+	// }
+
 	// Constructor for 
-	mysystem(double b, int V) : graph(V)
+	mysystem(double b, double gam, int V) : sis_net(b,gam,V)
 	{
-		valb = b;
 		valt = 0;
 	}
 
-	mysystem(double b, graph g) : graph(g)
+	mysystem(double b, double gam, graph g) : sis_net(b,gam,g)
 	{
-		valb = b;
 		valt = 0;
 	}
+
+	mysystem(sis_net m) : sis_net(m)
+	{
+		valt = 0;
+	}
+
 
 	// Run Gillespie algorithm for system
-	void Gillespie(std::ofstream& fout)
+	void Gillespie(std::ofstream& fout, int a)
 	{
-		// int i_max = 50;
-		int reaction;
-		int i = 0;
+		// Initial setup
+		int k_max = 300;
+		int reaction, x, y;
+		int k = 0;
 		double tau, alpha0, total, lower, r;
-		std::vector<double> alpha;
-
 		valt = 0.0;
 
-		fout << valt << '\t' << get_I() << std::endl;
+		// if (a = 1)
+		// {
+		// 	x = si_net::get_size();
+		// 	y = si_net::get_number_react();
+		// }
+		// else if (a = 2)
+		// {
+		// 	x = sis_net::get_size();
+		// 	y = sis_net::get_number_react();
+		// }
+
+		if (a = 2)
+		{
+			x = sis_net::get_size();
+			y = sis_net::get_number_react();
+		}
+
+
+		std::vector< std::vector<double> > alpha(x, std::vector<double>(y));
+
+		//Output initial state
+		// if (a = 1)
+		// {
+		// 	fout << valt << '\t' << si_net::get_I() << std::endl;
+		// 	// fout << valt << '\t' ;
+		// 	// for (int i = 0; i < x; i++)
+		// 	// {
+		// 	// 	fout << si_net::get_state(i);
+		// 	// }
+		// 	// fout << std::endl;
+		// }
+		// else if (a = 2)
+		// {
+		// 	// fout << valt << '\t' << sis_net::get_I() << std::endl;
+		// 	fout << valt << '\t' ;
+		// 	for (int i = 0; i < x; i++)
+		// 	{
+		// 		fout << sis_net::get_state(i);
+		// 	}
+		// 	fout << std::endl;
+		// }
+
+		if (a = 2)
+		{
+			fout << valt << '\t' << sis_net::get_I() << std::endl;
+			// fout << valt << '\t' ;
+			// for (int i = 0; i < x; i++)
+			// {
+			// 	fout << sis_net::get_state(i);
+			// }
+			// fout << std::endl;
+		}
+
+
 
 		// Loop
 		do
 		{		
-		// for (int i = 0; i < i_max; i++)
+		// for (int k = 0; k < k_max; k++)
 		// {
 			double r1 = get_rn01();
 			double r2 = get_rn01();
 
 			// Compute propensities
-			alpha = update_propensity();
-			alpha0 = std::accumulate(alpha.begin(),alpha.end(),0.0);
-			r = r2 * alpha0;
+			// if (a = 1)
+			// {
+			// 	alpha = si_net::update_propensity();
+			// }
+			// else if (a = 2)
+			// {
+			// 	alpha = sis_net::update_propensity();
+			// }
+
+			if (a = 2)
+			{
+				alpha = sis_net::update_propensity();
+			}
+
+
+			// Calculate alpha0
+			alpha0 = 0.0;
+
+			for (int j = 0; j < y; j++)
+			{
+				for (int i = 0; i < x; i++)
+				{
+					alpha0 += alpha[i][j];
+				}
+			}
+
+			r = r1 * alpha0;
 
 			// Compute tau based on this set of alphas
-			tau = get_tau(r1,alpha0);
+			tau = get_tau(r2,alpha0);
 
 			// Find next reaction
 			total = 0.0;
 			lower = 0.0;
-			for (int j = 0; j < alpha.size(); j++)
+			reaction = 0;
+
+			for (int j = 0; j < y; j++)
 			{
-				total += alpha[j];
-				if (r >= lower && r < total)
+				for (int i = 0; i < x; i++)
 				{
-					reaction = j;
-					break;
+					total += alpha[i][j];
+					if (r >= lower && r < total)
+					{
+						break;
+					}
+					lower = total;
+					reaction++;
 				}
-				lower = total;
 			}
 
 			// Update state
-			update_state(tau,reaction);
+			// if (a = 1)
+			// {
+			// 	si_net::update_state(reaction);
+			// }
+			// else if (a = 2)
+			// {
+			// 	sis_net::update_state(reaction);
+			// }
 
-			// Output state (to file)
-			fout << valt << '\t' << get_I() << std::endl;
-			// std::cout << valt << '\t' << get_I() << std::endl;
+			if (a = 2)
+			{
+				sis_net::update_state(reaction);
+			}
 
-		} while (get_I() > 0 && get_I() < get_size());
+			valt += tau;
+
+
+			// Output aggregate (to file)
+			// fout << valt << '\t' << get_I() << std::endl;
+
+			// Output states (to file)
+			// if (a = 1)
+			// {
+			// 	fout << valt << '\t' << si_net::get_I() << std::endl;
+			// 	// fout << valt << '\t' ;
+			// 	// for (int i = 0; i < x; i++)
+			// 	// {
+			// 	// 	fout << si_net::get_state(i);
+			// 	// }
+			// 	// fout << std::endl;
+			// }
+			// else if (a = 2)
+			// {
+			// 	// fout << valt << '\t' << sis_net::get_I() << std::endl;
+			// 	fout << valt << '\t' ;
+			// 	for (int i = 0; i < x; i++)
+			// 	{
+			// 		fout << sis_net::get_state(i);
+			// 	}
+			// 	fout << std::endl;
+			// }
+
+			if (a = 2)
+			{
+				fout << valt << '\t' << sis_net::get_I() << std::endl;
+				// fout << valt << '\t' ;
+				// for (int i = 0; i < x; i++)
+				// {
+				// 	fout << sis_net::get_state(i);
+				// }
+				// fout << std::endl;
+			}
+
+
+		} while (sis_net::get_I() > 0 && sis_net::get_I() < sis_net::get_size());
 		// }
 
 	}
-
-	// // 2. ACCESS METHODS
-
-	// // Access method for I
-	// double get_I()
-	// {
-	// 	return valI;
-	// }
-
-	// // Access method for t
-	// double get_t()
-	// {
-	// 	return valt;
-	// }
-
-	// // Access methods for propensities
 	
-	// std::vector<double> get_alpha()
-	// {
-	// 	std::vector <double> myvector(3);
-	// 	double alpha1 = vala*(valN - valI);
-	// 	double alpha2 = valb*(valN - valI)*valI;
-	// 	double alpha3 = valc*valI;
- //        myvector = {alpha1, alpha2, alpha3};
-	// 	return myvector;
-	// }
-        
-	// double get_alpha0()
-	// {
-	// 	std::vector <double> temp_vector = get_alpha();
-	// 	double tot(0.0);
-	// 	for (int i = 0; i < temp_vector.size(); i++)
-	// 	{
-	// 		tot += fabs(temp_vector[i]);
-	// 	}
-	// 	return tot;
-	// }
-
-	// // Access method for birth rate
-	// double get_birth()
-	// {
-	// 	std::vector <double> temp_vector = get_alpha();
-	// 	double tot(0.0);
-	// 	for (int i = 0; i < temp_vector.size(); i++)
-	// 	{
-	// 		if (temp_vector[i] > 0)
-	// 		{
-	// 			tot += fabs(temp_vector[i]);
-	// 		}
-	// 	}
-	// 	return tot;
-	// }
-
-	// // Access method for death rate
-	// double get_death()
-	// {
-	// 	std::vector <double> temp_vector = get_alpha();
-	// 	double tot(0);
-	// 	for (int i = 0; i < temp_vector.size(); i++)
-	// 	{
-	// 		if (temp_vector[i] < 0)
-	// 		{
-	// 			tot += fabs(temp_vector[i]);
-	// 		}
-	// 	}
-	// 	return tot;
-	// }
-	
-	// // 3. MODIFIER METHODS
-
-	// // Update system state
-	// void update()
-	// {
-	// 	double r1(get_rn01()), r2(get_rn01());
-	// 	double bd = get_birth() / (get_alpha0());
-	// 	valt += get_tau(r1);
-	// 	if (r2 >= 0 && r2 < bd)
-	// 	{
-	// 		valI++;
-	// 	}
-	// }
-
-	// // 4. PRINT METHODS
 
 
 };

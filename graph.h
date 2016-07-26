@@ -31,6 +31,13 @@ public:
         states = y;
     }
 
+    graph(const std::vector< std::list<int> >& adj, const std::vector<int>& st)
+    {
+        adjlist = adj;
+        states = st;
+    }
+
+
 
     // MODIFIERS
 
@@ -56,8 +63,6 @@ public:
             states.at(j) = s;
         }
     }
-
-
 
     // Make graph complete
     void make_complete()
