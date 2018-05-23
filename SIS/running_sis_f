@@ -1,0 +1,13 @@
+# Script to SIS network simulation using Gillespie algorithm
+
+g++ ./simulation_code/main.cpp -std=c++11 -o ./main
+
+if [ $# -gt 0 ]; then
+    echo "Running with chosen parameters: N = $1, b = $2, l = $3, I_init = $4"
+    ./main $1 $2 $3 $4
+    Rscript ./data_plotting/data_plotting.R $1 $2 $3 $4
+else
+    echo "Running with default parameters: N = 250, b = 0.5, l = 0.05, I_init = 10"
+    ./main 250 0.5 0.05 10
+    Rscript ./data_plotting/data_plotting.R 250 0.5 0.05 10
+fi
