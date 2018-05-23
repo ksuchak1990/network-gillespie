@@ -1,0 +1,6 @@
+# Script to run program
+
+g++ ./main.cpp -std=c++11 -o ./main
+./main
+ 
+# Rscript data_plotting.R
