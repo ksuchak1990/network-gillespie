@@ -1,0 +1,855 @@
+{
+	"auto_complete":
+	{
+		"selected_items":
+		[
+			[
+				"I",
+				"I_init"
+			],
+			[
+				"ar",
+				"argv"
+			],
+			[
+				"in",
+				"int"
+			],
+			[
+				"get_sta",
+				"get_state"
+			],
+			[
+				"val",
+				"valgam"
+			],
+			[
+				"react",
+				"reaction2"
+			],
+			[
+				"alph",
+				"alpha0"
+			],
+			[
+				"get_n",
+				"get_number_react"
+			],
+			[
+				"do",
+				"double"
+			],
+			[
+				"st",
+				"sta"
+			],
+			[
+				"alp",
+				"alpha0"
+			],
+			[
+				"tot",
+				"total"
+			],
+			[
+				"get",
+				"get_size"
+			],
+			[
+				"get_s",
+				"get_size"
+			],
+			[
+				"out",
+				"outfile"
+			],
+			[
+				"upda",
+				"update_state"
+			],
+			[
+				"get_t",
+				"get_tau"
+			],
+			[
+				"list",
+				"listiter"
+			],
+			[
+				"get_",
+				"get_t"
+			],
+			[
+				"s",
+				"system"
+			],
+			[
+				"en",
+				"end"
+			],
+			[
+				"beg",
+				"begin"
+			],
+			[
+				"my",
+				"mylist"
+			],
+			[
+				"adj",
+				"adjlist"
+			],
+			[
+				"ad",
+				"adjlist"
+			],
+			[
+				"vect",
+				"vectoriter"
+			],
+			[
+				"i",
+				"i"
+			],
+			[
+				"myi",
+				"myiter"
+			],
+			[
+				"iter",
+				"iterator"
+			],
+			[
+				"be",
+				"begin"
+			],
+			[
+				"myva",
+				"myvar"
+			],
+			[
+				"inc",
+				"include"
+			],
+			[
+				"end",
+				"endl"
+			]
+		]
+	},
+	"buffers":
+	[
+		{
+			"file": "simulation_code/main.cpp",
+			"settings":
+			{
+				"buffer_size": 1414,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "simulation_code/system.h",
+			"settings":
+			{
+				"buffer_size": 2527,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "simulation_code/SI_network.h",
+			"settings":
+			{
+				"buffer_size": 2164,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"contents": "#pragma once\n#ifndef __GRAPH_H_INCLUDED__	// Prevents class from being redefined\n#define __GRAPH_H_INCLUDED__\n\n#include <iostream>\n#include <vector>\n#include <list>\n\nclass graph\n{\nprivate:\n    std::vector< std::list<int> > adjlist;\n    std::vector<int> states;\n\npublic:\n\n    // CONSTRUCTORS\n\n    // Constructor for V vertices\n    graph(int V)\n    {\n        adjlist.resize(V);\n        states.resize(V);\n    }\n\n    // Copy constructor for graph, g_other\n    graph(const graph& g_other)\n    {\n        std::vector< std::list<int> > x = g_other.get_adj_list();\n        std::vector<int> y = g_other.get_all_states();\n        adjlist = x;\n        states = y;\n    }\n\n    // Constructor for adjacency list, adj, and state vector, st\n    graph(const std::vector< std::list<int> >& adj, const std::vector<int>& st)\n    {\n        adjlist = adj;\n        states = st;\n    }\n\n\n\n    // MODIFIERS\n\n    // Add edge (u,v)\n    void add_edge(int u, int v)\n    {\n        adjlist[u].push_back(v);\n        adjlist[v].push_back(u);\n    }\n\n    // Set state of vertex n to state s\n    void set_state(int n, int s)\n    {\n        states.at(n) = s;\n    }\n\n    // Set state of all vertices to state s\n    void set_state(int s)\n    {\n        int N = states.size();\n        for (int j = 0; j < N; j++)\n        {\n            states.at(j) = s;\n        }\n    }\n\n    // Make graph complete\n    void make_complete()\n    {\n    	int N = adjlist.size();\n		for (int i = 0; i < N; i++)\n		{\n			for (int j = 0; j < N; j++)\n			{\n				if (i != j)\n				{\n					adjlist[i].push_back(j);\n				}\n			}\n		}\n    }\n\n    // ACCESSORS\n\n    // Get list of vertices adjacent to vertex n\n    std::list<int> get_neighbours(int n)\n    {\n		std::list<int> mylist = adjlist.at(n);\n		return mylist;\n    }\n\n    // Get state of vertex n\n    int get_state(int n)\n    {\n        int x = states.at(n);\n        return x;\n    }\n\n    // Get list of states of vertices adjacent to vertex n\n    std::list<int> get_adj_state(int n)\n    {\n        std::list<int> k = get_neighbours(n);\n        std::list<int>::iterator listiter;\n        std::list<int> mylist;\n        int x;\n\n        for (listiter = k.begin(); listiter != k.end(); listiter++)\n        {\n            x = get_state(*listiter);\n            mylist.push_back(x);\n        }\n        return mylist;\n    }\n\n    // Get adjacency list\n    const std::vector< std::list<int> >& get_adj_list() const\n    {\n        return adjlist;\n    } \n\n    // Get vector of states\n    const std::vector<int>& get_all_states() const\n    {\n        return states;\n    }\n\n    // Get size of network\n    int get_size()\n    {\n        int x = states.size();\n        return x;\n    }\n\n    // \n\n\n\n};\n#endif	// GRAPH_H\n\n",
+			"file": "simulation_code/graph.h",
+			"file_size": 2555,
+			"file_write_time": 131138585860000000,
+			"settings":
+			{
+				"buffer_size": 2663,
+				"line_ending": "Unix"
+			}
+		}
+	],
+	"build_system": "",
+	"build_system_choices":
+	[
+	],
+	"build_varint": "",
+	"command_palette":
+	{
+		"height": 98.0,
+		"last_filter": "install",
+		"selected_items":
+		[
+			[
+				"install",
+				"Package Control: Install Package"
+			],
+			[
+				"proje",
+				"Project: Save As"
+			],
+			[
+				"vmen",
+				"View: Toggle Menu"
+			]
+		],
+		"width": 430.0
+	},
+	"console":
+	{
+		"height": 126.0,
+		"history":
+		[
+			"ls -al",
+			"import urllib.request,os,hashlib; h = '2915d1851351e5ee549c20394736b442' + '8bc59f460fa1548d1514676163dafc88'; pf = 'Package Control.sublime-package'; ipp = sublime.installed_packages_path(); urllib.request.install_opener( urllib.request.build_opener( urllib.request.ProxyHandler()) ); by = urllib.request.urlopen( 'http://packagecontrol.io/' + pf.replace(' ', '%20')).read(); dh = hashlib.sha256(by).hexdigest(); print('Error validating download (got %s instead of %s), please try manual install' % (dh, h)) if dh != h else open(os.path.join( ipp, pf), 'wb' ).write(by) "
+		]
+	},
+	"distraction_free":
+	{
+		"menu_visible": true,
+		"show_minimap": false,
+		"show_open_files": false,
+		"show_tabs": false,
+		"side_bar_visible": false,
+		"status_bar_visible": false
+	},
+	"expanded_folders":
+	[
+		"/home/ksuchak/Documents/thesis/network-gillespie/SI",
+		"/home/ksuchak/Documents/thesis/network-gillespie/SI/simulation_code"
+	],
+	"file_history":
+	[
+		"/home/ksuchak/Documents/thesis/network-gillespie/SIS/simulation_code/main.cpp",
+		"/home/ksuchak/Documents/thesis/network-gillespie/SI/main.cpp",
+		"/home/ksuchak/Documents/thesis/network-gillespie/SI/SI_network.h",
+		"/home/ksuchak/Documents/thesis/network-gillespie/SI/system.h",
+		"/home/ksuchak/Documents/thesis/network-gillespie/SI/graph.h",
+		"/home/ksuchak/Documents/thesis/network-gillespie/SIS/main.cpp",
+		"/home/ksuchak/Documents/thesis/network-gillespie/graph.h",
+		"/home/ksuchak/Documents/thesis/network-gillespie/SIS_network.h",
+		"/home/ksuchak/Documents/thesis/network-gillespie/SI_network.h",
+		"/home/ksuchak/Documents/thesis/network-gillespie/system.h",
+		"/home/ksuchak/Documents/thesis/network-gillespie/main.cpp",
+		"/home/ksuchak/Documents/thesis/network-gillespie/model.h",
+		"/home/ksuchak/Documents/thesis/network-gillespie/network.sublime-project",
+		"/home/ksuchak/.config/sublime-text-3/Packages/User/Preferences.sublime-settings",
+		"/home/ksuchak/Documents/thesis/thesis-code/main.cpp",
+		"/home/ksuchak/Documents/thesis/thesis-code/game_2.h",
+		"/home/ksuchak/Documents/thesis/network-gillespie/game_2.h",
+		"/home/ksuchak/Documents/thesis/network-gillespie/adjlist.h",
+		"/home/ksuchak/Documents/thesis/adjlist-code/main.cpp",
+		"/home/ksuchak/Documents/thesis/adjlist-code/adjlist.h",
+		"/home/ksuchak/Documents/thesis/thesis-code/temphead.h",
+		"/home/ksuchak/Documents/temp_work/testing_2/header.h",
+		"/home/ksuchak/Documents/temp_work/testing_2/main.cpp",
+		"/home/ksuchak/Documents/temp_work/testing/main.cpp",
+		"/home/ksuchak/Documents/temp_work/testing/header.h",
+		"/home/ksuchak/Documents/thesis_code_edit/game_2.h",
+		"/home/ksuchak/Documents/thesis_code_edit/main.cpp",
+		"/home/ksuchak/Documents/temp_work/thesis-code/main.cpp",
+		"/home/ksuchak/Documents/temp_work/thesis-code/temphead.h",
+		"/home/ksuchak/Documents/temp_work/thesis-code/tempmain.cpp",
+		"/home/ksuchak/Documents/thesis/odes/solving.cpp",
+		"/tmp/mozilla_ksuchak0/test_auto.c",
+		"/tmp/mozilla_ksuchak0/gillespie.c",
+		"/usr/share/doc/boost-examples/libs/graph/example/adjacency_list.cpp",
+		"/usr/share/doc/boost-examples/libs/graph/example/graphviz.cpp",
+		"/home/ksuchak/Documents/thesis_code/main.cpp",
+		"/home/ksuchak/Downloads/gillespie.c",
+		"/tmp/mozilla_ksuchak0/gillespie.cpp",
+		"/home/ksuchak/Documents/thesis_code_edit/data_plotting.R",
+		"/home/ksuchak/.config/sublime-text-3/Packages/Default/Preferences.sublime-settings",
+		"/home/ksuchak/.config/sublime-text-3/Packages/User/Distraction Free.sublime-settings"
+	],
+	"find":
+	{
+		"height": 36.0
+	},
+	"find_in_files":
+	{
+		"height": 0.0,
+		"where_history":
+		[
+		]
+	},
+	"find_state":
+	{
+		"case_sensitive": false,
+		"find_history":
+		[
+			"model",
+			"gamma",
+			"list",
+			"abs",
+			"get_alpha",
+			"get_alpha2",
+			"valb"
+		],
+		"highlight": true,
+		"in_selection": false,
+		"preserve_case": false,
+		"regex": false,
+		"replace_history":
+		[
+		],
+		"reverse": false,
+		"show_context": true,
+		"use_buffer2": true,
+		"whole_word": false,
+		"wrap": true
+	},
+	"groups":
+	[
+		{
+			"selected": 3,
+			"sheets":
+			[
+				{
+					"buffer": 0,
+					"file": "simulation_code/main.cpp",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1414,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								931,
+								1397
+							]
+						],
+						"settings":
+						{
+							"bracket_highlighter.busy": false,
+							"bracket_highlighter.locations":
+							{
+								"close":
+								{
+									"1":
+									[
+										1412,
+										1413
+									]
+								},
+								"icon":
+								{
+									"1":
+									[
+										"Packages/BracketHighlighter/icons/curly_bracket.png",
+										"brackethighlighter.default"
+									]
+								},
+								"open":
+								{
+									"1":
+									[
+										113,
+										114
+									]
+								},
+								"unmatched":
+								{
+								}
+							},
+							"bracket_highlighter.regions":
+							[
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_regex_content",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close",
+								"bh_single_quote_content",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_double_quote_content",
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_square_content",
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_angle_content",
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_curly_content",
+								"bh_c_define",
+								"bh_c_define_center",
+								"bh_c_define_open",
+								"bh_c_define_close",
+								"bh_c_define_content",
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_default_content",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_round_content",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_unmatched_content",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_tag_content"
+							],
+							"side_bar_folders_auto_load_folder": 1,
+							"syntax": "Packages/C++/C++.sublime-syntax",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 270.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 1,
+					"type": "text"
+				},
+				{
+					"buffer": 1,
+					"file": "simulation_code/system.h",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 2527,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"bracket_highlighter.busy": false,
+							"bracket_highlighter.locations":
+							{
+								"close":
+								{
+								},
+								"icon":
+								{
+								},
+								"open":
+								{
+								},
+								"unmatched":
+								{
+								}
+							},
+							"bracket_highlighter.regions":
+							[
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_default_content",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_double_quote_content",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_tag_content",
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_curly_content",
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_angle_content",
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_regex_content",
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_square_content",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_round_content",
+								"bh_c_define",
+								"bh_c_define_center",
+								"bh_c_define_open",
+								"bh_c_define_close",
+								"bh_c_define_content",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_unmatched_content",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close",
+								"bh_single_quote_content"
+							],
+							"side_bar_folders_auto_load_folder": 1,
+							"syntax": "Packages/C++/C++.sublime-syntax",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 1575.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 2,
+					"type": "text"
+				},
+				{
+					"buffer": 2,
+					"file": "simulation_code/SI_network.h",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 2164,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"bracket_highlighter.busy": false,
+							"bracket_highlighter.locations":
+							{
+								"close":
+								{
+								},
+								"icon":
+								{
+								},
+								"open":
+								{
+								},
+								"unmatched":
+								{
+								}
+							},
+							"bracket_highlighter.regions":
+							[
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_regex_content",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close",
+								"bh_single_quote_content",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_double_quote_content",
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_square_content",
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_angle_content",
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_curly_content",
+								"bh_c_define",
+								"bh_c_define_center",
+								"bh_c_define_open",
+								"bh_c_define_close",
+								"bh_c_define_content",
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_default_content",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_round_content",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_unmatched_content",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_tag_content"
+							],
+							"side_bar_folders_auto_load_folder": 1,
+							"syntax": "Packages/C++/C++.sublime-syntax",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 3,
+					"type": "text"
+				},
+				{
+					"buffer": 3,
+					"file": "simulation_code/graph.h",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 2663,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								2250,
+								2250
+							]
+						],
+						"settings":
+						{
+							"bracket_highlighter.busy": false,
+							"bracket_highlighter.locations":
+							{
+								"close":
+								{
+									"1":
+									[
+										2249,
+										2250
+									]
+								},
+								"icon":
+								{
+									"1":
+									[
+										"Packages/BracketHighlighter/icons/curly_bracket.png",
+										"brackethighlighter.default"
+									]
+								},
+								"open":
+								{
+									"1":
+									[
+										2168,
+										2169
+									]
+								},
+								"unmatched":
+								{
+								}
+							},
+							"bracket_highlighter.regions":
+							[
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_regex_content",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close",
+								"bh_single_quote_content",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_double_quote_content",
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_square_content",
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_angle_content",
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_curly_content",
+								"bh_c_define",
+								"bh_c_define_center",
+								"bh_c_define_open",
+								"bh_c_define_close",
+								"bh_c_define_content",
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_default_content",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_round_content",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_unmatched_content",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_tag_content"
+							],
+							"side_bar_folders_auto_load_folder": 1,
+							"syntax": "Packages/C++/C++.sublime-syntax",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 1204.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 0,
+					"type": "text"
+				}
+			]
+		}
+	],
+	"incremental_find":
+	{
+		"height": 23.0
+	},
+	"input":
+	{
+		"height": 33.0
+	},
+	"layout":
+	{
+		"cells":
+		[
+			[
+				0,
+				0,
+				1,
+				1
+			]
+		],
+		"cols":
+		[
+			0.0,
+			1.0
+		],
+		"rows":
+		[
+			0.0,
+			1.0
+		]
+	},
+	"menu_visible": true,
+	"output.find_results":
+	{
+		"height": 0.0
+	},
+	"pinned_build_system": "",
+	"project": "SI_network.sublime-project",
+	"replace":
+	{
+		"height": 42.0
+	},
+	"save_all_on_build": true,
+	"select_file":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+			[
+				"si",
+				"network-gillespie/SI_network.h"
+			],
+			[
+				"",
+				"network-gillespie/main.cpp"
+			]
+		],
+		"width": 0.0
+	},
+	"select_project":
+	{
+		"height": 500.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 380.0
+	},
+	"select_symbol":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"selected_group": 0,
+	"settings":
+	{
+	},
+	"show_minimap": true,
+	"show_open_files": true,
+	"show_tabs": true,
+	"side_bar_visible": false,
+	"side_bar_width": 155.0,
+	"status_bar_visible": true,
+	"template_settings":
+	{
+	}
+}
